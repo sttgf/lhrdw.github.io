@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRO这个软件的教程没有做完</title>
+    <style>
+        :root {
+            --win-bg: #f3f3f3;
+            --win-surface: #ffffff;
+            --win-accent: #0067c0;
+            --win-text: #1a1a1a;
+            --win-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--win-bg);
+            color: var(--win-text);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 680px;
+            background: var(--win-surface);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            border: 1px solid var(--win-border);
+            text-align: center;
+            margin: auto;
+        }
+
+        .warning-icon {
+            font-size: 4rem;
+            color: #ffb900;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        h1 {
+            color: var(--win-accent);
+            font-weight: 600;
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        .description {
+            line-height: 1.6;
+            color: #666;
+            margin: 1.5rem 0;
+            padding: 0 1rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.8rem 2rem;
+            background: var(--win-accent);
+            color: white !important;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+            text-decoration: none;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: #0056a3;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .secondary-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+            .warning-icon {
+                font-size: 3rem;
+            }
+            h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 警告图标 -->
+        <div class="warning-icon">⚠️</div>
+        
+        <!-- 主标题 -->
+        <h1>此程序的教程还没做</h1>
+        
+        <!-- 描述文本 -->
+        <div class="description">
+            <p>emmm...</p>
+            <p>实话告诉你吧，这个页面的东西其实还没做完...</p>
+            <p>绝对绝对不是我懒得做！<br>
+               如果你是急急国王，那就可以给我发邮件来催我<br>
+               so...再等等吧！</p>
+        </div>
+
+        <!-- 返回按钮 -->
+        <button class="back-btn" onclick="window.history.back()">
+            ← 返回上一页
+        </button>
+
+        <!-- 辅助信息 -->
+        <div class="secondary-text">
+            <p>非常急？请联系 schooltaregf0000@outlook.com</p>
+        </div>
+    </div>
+</body>
+</html>

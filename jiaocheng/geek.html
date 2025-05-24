@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geek Uninstaller 使用指南 - Windows 11风格</title>
+    <style>
+        :root {
+            --win-bg: #f3f3f3;
+            --win-surface: #ffffff;
+            --win-accent: #0067c0;
+            --win-warning: #fff4e5;
+            --win-border: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 2rem;
+            background: var(--win-bg);
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--win-surface);
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border: 1px solid var(--win-border);
+        }
+
+        h1 {
+            color: var(--win-accent);
+            border-bottom: 2px solid var(--win-border);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .warning-box {
+            background: var(--win-warning);
+            border-left: 4px solid #ffb900;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .step-card {
+            background: #f8f8f8;
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid var(--win-border);
+        }
+
+        .version-badge {
+            background: #e7f3ff;
+            color: var(--win-accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+
+        .button {
+            background: var(--win-accent);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover {
+            background: #0056a3;
+            transform: translateY(-1px);
+        }
+
+        ol {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin: 0.8rem 0;
+        }
+
+        .important {
+            color: #c42b1c;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Geek Uninstaller 使用指南</h1>
+
+        <div class="warning-box">
+            <p class="important">⚠️ 注意：本软件由 Thomas Koen 开发，官网下载：<br>
+            <a href="https://geekuninstaller.com/">https://geekuninstaller.com/</a></p>
+            <p>卢浩然下载站保证无毒，首次开站请多支持！</p>
+        </div>
+
+        <div class="step-card">
+            <h3>📢 使用前必读</h3>
+            <ol>
+                <li>仅支持 Windows XP 以上系统（不包含XP）</li>
+                <li class="important">必须关闭杀毒软件或添加白名单</li>
+                <li>右键选择「以管理员身份运行」
+                    <div class="version-badge">Win11需点击「更多操作」</div>
+                </li>
+                <li>遇到 SmartScreen 拦截请选择「仍要运行」</li>
+            </ol>
+        </div>
+
+        <div class="step-card">
+            <h3>📦 版本说明</h3>
+            <div class="version-badge">7z便携版</div>
+            <p>必须直接在压缩包内运行（不解压使用）</p>
+            
+            <div class="version-badge" style="margin-top:1rem">ZIP版</div>
+            <p>暂不提供下载</p>
+        </div>
+
+        <div class="step-card">
+            <h3>🛠️ 两种卸载模式</h3>
+            <div class="version-badge">普通卸载</div>
+            <ol>
+                <li>双击目标软件 或 右键选择「卸载(U)」</li>
+                <li>等待完成自带卸载流程</li>
+                <li>自动扫描残留文件/注册表（耗时较长）</li>
+                <li>勾选所有检测结果后清理</li>
+            </ol>
+
+            <div class="version-badge" style="margin-top:1rem">强制删除</div>
+            <ol>
+                <li>右键选择「强制删除(F)」</li>
+                <li>直接删除主文件/注册表项</li>
+                <li class="important">不会二次扫描残留文件</li>
+                <li>适合快速清理常规软件</li>
+            </ol>
+        </div>
+
+        <div class="warning-box">
+            <h3>❗ 注意事项</h3>
+            <ul>
+                <li>卸载过程中所有安全警告请一律放行</li>
+                <li>系统关键组件请勿强制删除</li>
+            </ul>
+        </div>
+
+        <a href="javascript:history.back()" class="button">← 返回上一页</a>
+    </div>
+</body>
+</html>

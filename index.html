@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Windows 11 工具合集</title>
+  <!-- 引入 Font Awesome 图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --text: #1e1e1e;
+      --surface: #ffffff;
+      --accent: #2563eb;
+      --radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #eaeaea;
+      --surface: #2d2d2d;
+      --accent: #4f94ff;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      transition: var(--transition);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 10px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .site-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent);
+      transition: var(--transition);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: var(--surface);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300%;
+      height: 300%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 10.01%);
+      transform: translate(-50%, -50%) scale(0);
+      transition: transform 0.5s ease;
+      border-radius: 50%;
+    }
+
+    .nav-btn:hover::after {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .nav-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: transparent;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .tool-card {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(120deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+      transform: rotate(25deg);
+      transition: transform 0.6s ease;
+    }
+
+    .tool-card:hover::before {
+      transform: rotate(25deg) translateY(-50px);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .tool-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--accent);
+      border-radius: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .tool-card:hover .tool-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .tool-name {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 12px 0 6px;
+    }
+
+    .tool-desc {
+      font-size: 0.95rem;
+      color: rgba(0, 0, 0, 0.7);
+      margin-bottom: 12px;
+    }
+
+    .tool-link {
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      border-bottom: 1px dashed var(--accent);
+      transition: var(--transition);
+    }
+
+    .tool-link:hover {
+      opacity: 0.8;
+      border-bottom-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      .tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 头部 -->
+    <header>
+      <h1 class="site-title">LHR工具合集</h1>
+      <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;font-size:1.5rem;transition:var(--transition)">🌓</button>
+    </header>
+
+    <!-- 导航 -->
+    <div class="nav">
+      <button class="nav-btn active" onclick="showSection('madeLHR')">LHR官方制作</button>
+      <button class="nav-btn active" onclick="showSection('tools')">工具</button>
+      <button class="nav-btn" onclick="showSection('websites')">网站</button>
+    </div>
+
+    <div id="madeLHR" class="section" style="display: none;">
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-terminal"></i></div>
+          <div class="tool-name">LHR下载站</div>
+          <p class="tool-desc">一个免费不用登陆的下载站</p>
+          <a href="./xiazaizhan.html" target="_blank" class="tool-link">访问官网</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工具部分 -->
+    <div id="tools" class="section">
+      <div class="tool-grid">
+        <!-- 开发工具 -->
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-laptop-code"></i></div>
+          <div class="tool-name">Visual Studio Code</div>
+          <p class="tool-desc">轻量级但功能强大的源代码编辑器</p>
+          <a href="https://code.visualstudio.com/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-sticky-note"></i></div>
+          <div class="tool-name">Notion</div>
+          <p class="tool-desc">多功能笔记和项目管理工具</p>
+          <a href="https://www.notion.so/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-pencil-ruler"></i></div>
+          <div class="tool-name">Figma</div>
+          <p class="tool-desc">在线UI设计工具</p>
+          <a href="https://www.figma.com/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-image"></i></div>
+          <div class="tool-name">GIMP</div>
+          <p class="tool-desc">开源图像编辑器</p>
+          <a href="https://www.gimp.org/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-microphone-alt"></i></div>
+          <div class="tool-name">Audacity</div>
+          <p class="tool-desc">开源音频编辑器</p>
+          <a href="https://www.audacityteam.org/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-file-alt"></i></div>
+          <div class="tool-name">LibreOffice</div>
+          <p class="tool-desc">开源办公套件</p>
+          <a href="https://www.libreoffice.org/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <!-- 系统工具 -->
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-file-archive"></i></div>
+          <div class="tool-name">7-Zip</div>
+          <p class="tool-desc">开源压缩解压工具</p>
+          <a href="https://www.7-zip.org/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-search"></i></div>
+          <div class="tool-name">Everything</div>
+          <p class="tool-desc">快速文件搜索工具</p>
+          <a href="https://www.voidtools.com/zh-cn/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-terminal"></i></div>
+          <div class="tool-name">Windows Terminal</div>
+          <p class="tool-desc">微软新一代终端工具</p>
+          <a href="https://learn.microsoft.com/zh-cn/windows/terminal/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <!-- 浏览器 -->
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fab fa-chrome"></i></div>
+          <div class="tool-name">Chrome</div>
+          <p class="tool-desc">谷歌浏览器</p>
+          <a href="https://www.google.cn/chrome/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fab fa-firefox"></i></div>
+          <div class="tool-name">Firefox</div>
+          <p class="tool-desc">开源浏览器</p>
+          <a href="https://www.mozilla.org/firefox/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fab fa-edge"></i></div>
+          <div class="tool-name">Edge</div>
+          <p class="tool-desc">微软官方浏览器</p>
+          <a href="https://www.microsoft.com/edge" target="_blank" class="tool-link">访问官网</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 网站部分 -->
+    <div id="websites" class="section" style="display: none;">
+      <div class="tool-grid">
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-book"></i></div>
+          <div class="tool-name">MDN Web Docs</div>
+          <p class="tool-desc">前端开发权威文档</p>
+          <a href="https://developer.mozilla.org/zh-CN/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-palette"></i></div>
+          <div class="tool-name">Color Hunt</div>
+          <p class="tool-desc">配色方案灵感</p>
+          <a href="https://colorhunt.co/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-camera"></i></div>
+          <div class="tool-name">Unsplash</div>
+          <p class="tool-desc">免费高清图片库</p>
+          <a href="https://unsplash.com/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-icons"></i></div>
+          <div class="tool-name">IconArchive</div>
+          <p class="tool-desc">海量图标资源</p>
+          <a href="https://www.iconarchive.com/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-music"></i></div>
+          <div class="tool-name">Pixabay Music</div>
+          <p class="tool-desc">免费音乐资源</p>
+          <a href="https://pixabay.com/music/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-video"></i></div>
+          <div class="tool-name">Mixkit</div>
+          <p class="tool-desc">免费视频素材库</p>
+          <a href="https://mixkit.co/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-paint-brush"></i></div>
+          <div class="tool-name">Canva</div>
+          <p class="tool-desc">在线设计工具</p>
+          <a href="https://www.canva.cn/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-edit"></i></div>
+          <div class="tool-name">Grammarly</div>
+          <p class="tool-desc">英文语法检查</p>
+          <a href="https://www.grammarly.com/" target="_blank" class="tool-link">访问官网</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme');
+      document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.getElementById(id).style.display = 'block';
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+    }
+
+    window.onload = function () {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.setAttribute('data-theme', 'dark');
+      } else {
+        document.body.setAttribute('data-theme', 'light');
+      }
+    };
+  </script>
+</body>
+</html>

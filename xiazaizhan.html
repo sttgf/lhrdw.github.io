@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LHR下载站</title>
+    <style>
+        :root {
+            --bg: #f5f5f5;
+            --text: #333;
+            --surface: #ffffff;
+            --accent: #2563eb;
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg: #1e1e1e;
+            --text: #eaeaea;
+            --surface: #2d2d2d;
+            --accent: #4f94ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        /* 页面头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .site-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* 分类导航 */
+        .category-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .category-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--surface);
+            border: 1px solid #767676;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* 动态公告 */
+        .ann-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .ann-button.expanded {
+            transform: scale(1.2);
+            width: 200px;
+            height: 120px;
+            border-radius: 12px;
+            flex-direction: flex-start;
+            padding: 15px;
+            font-size: 0.9rem;
+            text-align: left;
+            flex-wrap: wrap;
+        }
+
+        .ann-content {
+            display: none;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .close-hint {
+            display: none;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+            margin-top: 8px;
+        }
+
+        .ann-button.expanded .ann-content,
+        .ann-button.expanded .close-hint {
+            display: block;
+        }
+
+        /* 文件卡片 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .file-card {
+            background: var(--surface);
+            padding: 20px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .download-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <div class="header">
+        <h1 class="site-title">LHR下载站</h1>
+        <button onclick="toggleTheme()" style="margin-left:10px;background:none;border:none;cursor:pointer;font-size:1.2rem">🌓</button>
+    </div>
+
+    <!-- 分类导航 -->
+    <div class="category-nav" id="categoryNav"></div>
+
+    <!-- 文件列表 -->
+    <div class="card-grid" id="fileList"></div>
+
+    <!-- 动态公告 -->
+    <div class="ann-button" id="annButton">
+        <span id="annLabel">公告</span>
+        <div class="ann-content" id="annContent"></div>
+        <div class="close-hint">点击空白处关闭</div>
+    </div>
+
+    <script>
+        // 配置文件（仅需修改此处即可管理内容）
+        const CONFIG = {
+            announcements: [
+                "📌 系统维护：不定时更新",
+                "🎉 2025/5/24新增 无",
+                " ⬇️ LHR下载站 致力做更好的下载站"
+            ],
+            files: [
+                {
+                    name: "windows激活工具(中文开发中...)",
+                    category: "windows工具",
+                    filename: "激活工具.zip",
+                    size: "269KB"
+                },
+                {
+                    name: "南山对讲",
+                    category: "实用工具",
+                    filename: "nsptt.zip",
+                    size: "7794KB"
+                },
+                {
+                    name: "geek",
+                    category: "实用工具",
+                    filename: "geek.zip",
+                    size: "2990KB"
+                },
+                {
+                    name: "Win11轻松设置(没有教程)",
+                    category: "windows工具",
+                    filename: "Windows11轻松设置.zip",
+                    size: "297KB"
+                },
+                {
+                    name: "winrarx32",
+                    category: "实用工具",
+                    filename: "winrarx32.zip",
+                    size: "3323KB"
+                },
+                {
+                    name: "winrarx64",
+                    category: "实用工具",
+                    filename: "winrarx64.zip",
+                    size: "3509KB"
+                }
+            ]
+        };
+
+        // 初始化入口
+        function init() {
+            generateCategories();
+            renderFiles();
+            initAnnouncement();
+        }
+
+        // 生成分类按钮
+        function generateCategories() {
+            const nav = document.getElementById('categoryNav');
+            
+            // 获取所有唯一分类
+            const categories = ['全部', ...new Set(CONFIG.files.map(f => f.category))];
+            
+            // 创建按钮元素
+            nav.innerHTML = categories.map(cat => `
+                <button class="category-btn">${cat}</button>
+            `).join('');
+            
+            // 添加点击事件
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => filterFiles(btn.textContent));
+            });
+            
+            // 默认激活第一个按钮
+            nav.querySelector('.category-btn').classList.add('active');
+        }
+
+        // 过滤文件
+        function filterFiles(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => 
+                btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.file-card').forEach(card => {
+                const cat = card.dataset.category;
+                card.style.display = (category === '全部' || cat === category) ? 'block' : 'none';
+            });
+        }
+
+        // 渲染文件
+        function renderFiles() {
+            const container = document.getElementById('fileList');
+            container.innerHTML = CONFIG.files.map(file => `
+                <div class="file-card" data-category="${file.category}">
+                    <h3>${file.name}</h3>
+                    <p>大小: ${file.size}</p>
+                    <button class="download-btn" 
+                            onclick="handleDownload('${file.filename}')">
+                        ⬇️ 下载
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // 下载处理
+        function handleDownload(filename) {
+            const showTutorial = confirm('是否先查看教程再下载？\n点击"确定"查看教程\n点击"取消"直接下载');
+            
+            if (showTutorial) {
+                // 教程路径：jiaocheng/[文件名].html
+                window.open(`jiaocheng/${filename.split('.')[0]}.html`, '_blank');
+            } else {
+                // 文件路径：files/[文件名.扩展名]
+                const link = document.createElement('a');
+                link.href = `files/${filename}`;
+                link.download = filename;
+                link.click();
+            }
+        }
+
+        // 公告系统初始化
+        function initAnnouncement() {
+            const annBtn = document.getElementById('annButton');
+            const annContent = document.getElementById('annContent');
+            
+            // 设置公告内容
+            annContent.innerHTML = CONFIG.announcements.map(msg => `<p>${msg}</p>`).join('');
+            
+            // 切换公告状态
+            annBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                annBtn.classList.toggle('expanded');
+                document.getElementById('annLabel').style.display = 
+                    annBtn.classList.contains('expanded') ? 'none' : 'inline';
+            });
+        }
+
+        // 点击外部区域关闭公告
+        document.addEventListener('click', (e) => {
+            const annBtn = document.getElementById('annButton');
+            if (annBtn.classList.contains('expanded') && !annBtn.contains(e.target)) {
+                annBtn.classList.remove('expanded');
+                document.getElementById('annLabel').style.display = 'inline';
+            }
+        });
+
+        // 主题切换
+        function toggleTheme() {
+            document.body.setAttribute('data-theme',
+                document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+            );
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

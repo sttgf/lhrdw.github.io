@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows激活工具使用教程</title>
+    <style>
+        :root {
+            --accent: #0078d4;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --bg-light: #f9f9f9;
+            --card-bg: #ffffff;
+            --warning-bg: #fff8e1;
+            --success-bg: #f0f9f0;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .alert-box {
+            background-color: var(--warning-bg);
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .step-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 15px;
+        }
+        
+        .terminal {
+            background: #2d2d2d;
+            color: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: Consolas, monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .success-box {
+            background: var(--success-bg);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .method-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .method-table th, .method-table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .method-table th {
+            background: #f5f5f5;
+        }
+        
+        .method-table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .note {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-left: 4px solid var(--accent);
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .faq-item {
+            margin-bottom: 25px;
+        }
+        
+        .faq-question {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .step-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Windows激活工具使用教程</h1>
+            <p>永久激活Windows系统的完整指南</p>
+        </header>
+        
+        <div class="alert-box">
+            <strong>⚠️ 重要提示：</strong> 本工具仅用于测试和学习目的，商业环境请使用正版授权,在启动时有可能会请求升级，那是一个BUG，请按0继续
+        </div>
+        
+        <!-- 第一步：准备工作 -->
+        <div class="step-card">
+            <div>
+                <span class="step-number">1</span>
+                <h2 class="step-title">准备工作</h2>
+            </div>
+            
+            <h3>系统要求</h3>
+            <ul>
+                <li>支持Windows 7及以上系统（含Windows 11）</li>
+                <li>需要管理员权限运行</li>
+            </ul>
+            
+            <h3>安全设置调整</h3>
+            <div class="note">
+                <p>激活前必须完成以下操作：</p>
+            </div>
+            <ul>
+                <li>完全退出杀毒软件（包括Windows Defender）</li>
+                <li>将工具添加至杀毒软件白名单</li>
+                <li>遇到SmartScreen拦截时选择"更多信息"→"仍要运行"</li>
+            </ul>
+            
+            <div class="terminal">
+                <span style="color: #4fc3f7;"># Windows 10/11用户特别注意：</span><br>
+                <span style="color: #69f0ae;">右键 → "显示更多选项" → "以管理员身份运行"</span>
+            </div>
+        </div>
+        
+        <!-- 第二步：激活流程 -->
+        <div class="step-card">
+            <div>
+                <span class="step-number">2</span>
+                <h2 class="step-title">激活流程</h2>
+            </div>
+            
+            <h3>启动工具后界面</h3>
+            <div class="terminal">
+                ______________________________________________________________<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Activation Methods:<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1] HWID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Windows<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2] Ohook&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Office<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3] TSforge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Windows / Office / ESU<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4] KMS38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Windows<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5] Online KMS&nbsp;&nbsp;&nbsp;&nbsp;- Windows / Office<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__________________________________________________<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6] Check Activation Status<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7] Change Windows Edition<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[8] Change Office Edition<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__________________________________________________<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[9] Troubleshoot<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[E] Extras<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[H] Help<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[0] Exit<br>
+                ______________________________________________________________<br><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Choose a menu option using your keyboard [1,2,3...E,H,0] :
+            </div>
+            
+            <h3>推荐激活方案</h3>
+            <table class="method-table">
+                <tr>
+                    <th>输入</th>
+                    <th>方法</th>
+                    <th>说明</th>
+                    <th>适用场景</th>
+                </tr>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td>HWID</td>
+                    <td>Windows永久激活（推荐）</td>
+                    <td>首次激活首选方案</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td>TSforge</td>
+                    <td>全能激活方案（备用）</td>
+                    <td>HWID失败时使用</td>
+                </tr>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td>KMS38</td>
+                    <td>激活至2038年</td>
+                    <td>企业环境</td>
+                </tr>
+            </table>
+            
+            <h3>执行过程示例</h3>
+            <div class="terminal">
+                Initializing... <br>
+                [✔] Applying digital license<br>
+                [✔] Restoring Windows Region<br>
+                <br>
+                [Windows 11专业版] is permanently activated with a digital license.<br>
+                <br>
+                Press any key to Go back...
+            </div>
+            
+            <div class="success-box">
+                <strong>✅ 激活成功标志：</strong> 看到"permanently activated"提示或"Successful"字样
+            </div>
+        </div>
+        
+        <!-- 第三步：验证激活 -->
+        <div class="step-card">
+            <div>
+                <span class="step-number">3</span>
+                <h2 class="step-title">验证激活状态</h2>
+            </div>
+            
+            <h3>方法一：自动验证</h3>
+            <p>工具会自动显示激活结果，成功示例如下：</p>
+            <div class="terminal">
+                [Windows 11专业版] is permanently activated with a digital license.
+            </div>
+            
+            <h3>方法二：手动验证</h3>
+            <p>1. 开始菜单 → 输入 <code>winver</code> → 查看版本信息</p>
+            <p>2. 命令提示符执行：</p>
+            <div class="terminal">
+                slmgr /xpr
+            </div>
+        </div>
+        
+        <!-- 第四步：支持系统 -->
+        <div class="step-card">
+            <div>
+                <span class="step-number">4</span>
+                <h2 class="step-title">支持系统列表</h2>
+            </div>
+            
+            <h3>Windows 系统</h3>
+            <ul>
+                <li>Windows 7/8.1/10/11 全版本</li>
+                <li>Windows Server 2008 R2 - 2025</li>
+            </ul>
+            
+            <h3>Office 版本</h3>
+            <ul>
+                <li>Office 2013/2016/2019/2021/2024</li>
+            </ul>
+        </div>
+        
+        <!-- 常见问题 -->
+        <div class="step-card">
+            <h2>常见问题解答</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: 激活失败怎么办？</div>
+                <p>A: 尝试以下步骤：</p>
+                <ol>
+                    <li>确认已完全关闭杀毒软件</li>
+                    <li>使用TSforge方案（选项3）</li>
+                    <li>检查系统是否为支持版本</li>
+                </ol>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: 为什么显示2038年到期？</div>
+                <p>A: 这是KMS38方案（选项4）的正常现象，属于长期激活方案</p>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Q: Office如何激活？</div>
+                <p>A: 使用Ohook方案（选项2）专门激活Office</p>
+            </div>
+        </div>
+        
+        <!-- 附录 -->
+        <div class="step-card">
+            <h2>附录：完整命令参考</h2>
+            
+            <table class="method-table">
+                <tr>
+                    <th>输入</th>
+                    <th>功能</th>
+                    <th>说明</th>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>检查激活状态</td>
+                    <td>验证当前激活情况</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>切换Windows版本</td>
+                    <td>需要更换系统版本时</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>疑难解答</td>
+                    <td>激活异常时使用</td>
+                </tr>
+            </table>
+            
+            <div class="note">
+                <p>建议首次使用直接选择选项1（HWID）进行永久激活，失败时再尝试选项3（TSforge）</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
