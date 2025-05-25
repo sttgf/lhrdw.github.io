@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LHR工具箱</title>
+  <title>LHR工具合集</title>
   <!-- 引入 Font Awesome 图标 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    /* 样式保持不变 */
     :root {
       --bg: #f5f5f5;
       --text: #1e1e1e;
@@ -171,6 +172,8 @@
       font-size: 0.9rem;
       border-bottom: 1px dashed var(--accent);
       transition: var(--transition);
+      position: relative;
+      z-index: 2;
     }
 
     .tool-link:hover {
@@ -195,21 +198,23 @@
 
     <!-- 导航 -->
     <div class="nav">
-      <button class="nav-btn active" onclick="showSection('madeLHR')">LHR官方制作</button>
-      <button class="nav-btn active" onclick="showSection('tools')">工具</button>
-      <button class="nav-btn" onclick="showSection('websites')">网站</button>
+      <button class="nav-btn active" onclick="showSection('madeLHR', event)">LHR官方制作</button>
+      <button class="nav-btn active" onclick="showSection('tools', event)">工具</button>
+      <button class="nav-btn" onclick="showSection('websites', event)">网站</button>
     </div>
 
+    <!-- 各内容区块 -->
     <div id="madeLHR" class="section" style="display: none;">
       <div class="tool-grid">
         <div class="tool-card">
           <div class="tool-icon"><i class="fas fa-terminal"></i></div>
           <div class="tool-name">LHR下载站</div>
-          <p class="tool-desc">一个免费不用登陆的下载站</p>
-          <a href="./xzz" target="_blank" class="tool-link">访问官网</a>
+          <p class="tool-desc">一个免费不用登录的下载站</p>
+          <a href="./xzz" target="_blank" class="tool-link">愣着干啥?赶快访问吧!</a>
         </div>
       </div>
     </div>
+
 
     <!-- 工具部分 -->
     <div id="tools" class="section">
@@ -348,29 +353,38 @@
   </div>
 
   <script>
+    // 修复后的JavaScript
     function toggleTheme() {
       const current = document.body.getAttribute('data-theme');
       document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     }
 
-    function showSection(id) {
+    function showSection(id, event) {
+      // 隐藏所有区块
       document.querySelectorAll('.section').forEach(section => {
         section.style.display = 'none';
       });
+      
+      // 显示目标区块
       document.getElementById(id).style.display = 'block';
 
+      // 更新按钮状态
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
       });
-      event.target.classList.add('active');
+      event.currentTarget.classList.add('active');
     }
 
+    // 初始化主题
     window.onload = function () {
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         document.body.setAttribute('data-theme', 'dark');
       } else {
         document.body.setAttribute('data-theme', 'light');
       }
+      
+      // 默认显示工具区块
+      document.getElementById('tools').style.display = 'block';
     };
   </script>
 </body>
