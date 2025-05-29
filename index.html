@@ -75,12 +75,13 @@
     .nav-btn::after {
       content: '';
       position: absolute;
+      /* 点击涟漪效果定位 */
       top: 50%;
       left: 50%;
       width: 300%;
       height: 300%;
       background: radial-gradient(circle, rgba(255,255,255,0.2) 10%, transparent 10.01%);
-      transform: translate(-50%, -50%) scale(0);
+      transform: translate(-50%, -50%) scale(0); /* 初始状态不可见 */
       transition: transform 0.5s ease;
       border-radius: 50%;
     }
@@ -188,9 +189,11 @@
     }
   </style>
 </head>
+
 <body>
+  <!-- 主要容器 -->
   <div class="container">
-    <!-- 头部 -->
+    <!-- 头部区域 -->
     <header>
       <h1 class="site-title">LHR工具合集</h1>
       <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;font-size:1.5rem;transition:var(--transition)">🌓</button>
@@ -212,6 +215,13 @@
           <p class="tool-desc">一个免费不用登录的下载站</p>
           <a href="./xzz" target="_blank" class="tool-link">愣着干啥?赶快访问吧!</a>
         </div>
+        <div class="tool-grid">
+          <div class="tool-card">
+            <div class="tool-icon"><i class="fas fa-terminal"></i></div>
+            <div class="tool-name">屎</div>
+            <p class="tool-desc">本以为做得很好，结果是依托</p>
+            <a href="./6.1儿童节.html" target="_blank" class="tool-link">点我访问...</a>
+          </div>
       </div>
     </div>
 
@@ -352,6 +362,58 @@
     </div>
   </div>
 
+  <!-- 在 body 结束标签前添加以下代码 -->
+  <div style="text-align: center; margin-top: 50px;">
+  <button id="weirdButton" style="padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; position: relative;">
+  回声洞
+  </button>
+  <div id="messageContainer" style="margin-top: 20px; min-height: 50px;"></div>
+  </div>
+  
+  <script>
+  // 在 script 标签中添加以下代码
+  const weirdButton = document.getElementById('weirdButton');
+  const messageContainer = document.getElementById('messageContainer');
+  const messages = [
+  "生活就像海洋，只有意志坚强的人才能到达彼岸",
+  "今天的你也很棒，记得给自己一个微笑",
+  "作业写累了？站起来活动一下吧",
+  "你知道吗？其实你不知道下一个回声洞的内容是什么",
+  "你知道吗？程序员平均每天要喝3杯咖啡",
+  "有时候不努力一下，你都不知道什么叫绝望",
+  "这个按钮其实没什么用，就像人生一样",
+  "你正在阅读的这段文字是随机生成的",
+  "如果生活欺骗了你，那就多骗几次生活",
+  "早睡早起身体好，可是晚睡晚起心情好啊",
+  "程序员最浪漫的事，就是陪你一起debug到老"
+  ];
+  
+  weirdButton.addEventListener('click', function() {
+  // 按钮掉落动画
+  this.style.transition = 'top 0.5s ease';
+  this.style.position = 'relative';
+  this.style.top = '200px';
+  
+  // 随机选择一条消息
+  const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+  
+  // 显示消息
+  messageContainer.innerHTML = `
+  <p style="color: var(--text); font-size: 1.2rem; animation: fadeIn 0.5s ease;">
+  ${randomMessage}
+  </p>
+  `;
+  
+  // 3秒后重置按钮位置
+  setTimeout(() => {
+  this.style.top = '0';
+  this.style.transition = 'all 0.3s ease';
+  }, 3000);
+  });
+  </script>
+  
+  </script>
+  
   <script>
     // 修复后的JavaScript
     function toggleTheme() {

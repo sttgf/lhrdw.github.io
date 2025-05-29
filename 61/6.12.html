@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>屎</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="fireworks"></canvas>
+
+    <script>
+        const canvas = document.getElementById('fireworks');
+        const ctx = canvas.getContext('2d');
+        // 多个烟花音效随机播放
+        const fireworkSounds = [
+            'https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3',
+            'https://assets.mixkit.co/active_storage/sfx/2574/2574-preview.mp3',
+            'https://assets.mixkit.co/active_storage/sfx/2575/2575-preview.mp3'
+        ];
+        const fireworkSound = new Audio();
+
+        // 初始化Canvas尺寸（未修改）
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 优化粒子类（关键修改部分）
+        class Particle {
+            constructor(x, y, hue) {
+                this.x = x;
+                this.y = y;
+                // 径向速度分布（更真实的爆炸方向）
+                const angle = Math.random() * Math.PI * 2;
+                const speed = (Math.random() * 5) + 5; // 5-10的随机速度
+                this.velocity = {
+                    x: Math.cos(angle) * speed,
+                    y: Math.sin(angle) * speed
+                };
+                this.radius = Math.random() * 1.5 + 1; // 更细腻的尺寸变化
+                // 颜色混合主色和辅色（±30度）
+                this.color = `hsl(${hue + (Math.random() - 0.5) * 30}, 100%, ${Math.random() * 10 + 50}%)`;
+                this.alpha = 1;
+                this.life = Math.random() * 40 + 80; // 随机生命周期（80-120）
+                this.gravity = 0.08; // 增强重力效果
+                this.friction = 0.93; // 增加空气阻力
+                this.shape = Math.random() < 0.3 ? 'star' : 'circle'; // 30%星形粒子
+            }
+
+            update() {
+                this.velocity.x *= this.friction;  // 速度衰减
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;  // 应用重力
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.010;  // 更慢的透明度衰减
+                this.life--;
+            }
+
+            draw() {
+                // 绘制尾焰（半透明轨迹）
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius * 1.5, 0, Math.PI * 2);
+                ctx.globalAlpha = this.alpha * 0.3;
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // 绘制主粒子
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        let particles = [];
+        // 生成烟花（关键修改部分）
+        function createFirework(x, y) {
+            // 随机选择音效
+            fireworkSound.src = fireworkSounds[Math.floor(Math.random() * fireworkSounds.length)];
+            fireworkSound.currentTime = 0;
+            fireworkSound.play();
+
+            const baseHue = Math.random() * 360; // 基础色相
+            const particleCount = Math.random() * 50 + 100; // 随机粒子数（100-150）
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y, baseHue));
+            }
+        }
+
+        // 动画循环（背景更淡）
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; // 更慢的背景淡化
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 播放逻辑（随机间隔）
+        function playFireworks() {
+            const nextFirework = () => {
+                const x = Math.random() * canvas.width * 0.6 + canvas.width * 0.2;
+                const y = Math.random() * canvas.height * 0.3 + canvas.height * 0.1;
+                createFirework(x, y);
+                setTimeout(nextFirework, Math.random() * 1500 + 1500); // 1.5-3秒随机间隔
+            };
+            nextFirework();
+        }
+
+        // 启动播放（未修改）
+        playFireworks();
+    </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>儿童节动态按钮</title>
+    <style>
+        /* 新增：设置页面背景和居中布局 */
+        body {
+            margin: 0;
+            min-height: 100vh; /* 保证垂直居中 */
+            display: flex;
+            flex-direction: column; /* 按钮和重来按钮垂直排列 */
+            justify-content: center;
+            align-items: center;
+            background-color: #e3f2fd; /* 淡蓝色背景 */
+        }
+
+        /* Win11风格基础样式（原有代码保留） */
+        .win11-btn {
+            position: relative;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            /* Win11经典渐变背景 */
+            background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(240,240,240,0.9) 100%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.08);
+            transition: all 0.3s ease; /* 统一过渡动画 */
+            overflow: hidden;
+        }
+
+        /* 悬停放大效果（原有代码保留） */
+        .win11-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.12);
+        }
+
+        /* 新增：重来按钮样式 */
+        .reset-btn {
+            margin-top: 20px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #2196F3; /* 蓝色背景 */
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: none; /* 初始隐藏 */
+            transition: transform 0.2s ease;
+        }
+        .reset-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 点击后各效果的动画定义（原有代码保留） */
+        @keyframes fall-down {
+            to {
+                transform: translateY(calc(100vh - 100%)) rotateX(70deg);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes explode {
+            to {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes liquid-flow {
+            30% { border-radius: 50%; }
+            100% {
+                transform: translateY(calc(100vh - 100%));
+                border-radius: 999px;
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes color-change {
+            0% { background: #ff6b6b; }
+            25% { background: #4ecdc4; }
+            50% { background: #45b7d1; }
+            75% { background: #96ceb4; }
+            100% { background: #ff6b6b; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Win11风格按钮（原有代码保留） -->
+    <button class="win11-btn" id="magicBtn">神奇按钮✨</button>
+    
+    <!-- 新增：重来按钮 -->
+    <button class="reset-btn" id="resetBtn">重来一次</button>
+
+    <script>
+        const btn = document.getElementById('magicBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // 原有点击事件（修改部分：添加动画完成后显示重来按钮）
+        btn.addEventListener('click', () => {
+            const random = Math.random();
+            btn.removeAttribute('style');
+            btn.classList.remove('explode-particles');
+            resetBtn.style.display = 'none'; // 点击时先隐藏
+
+            if (random < 0.2) {
+                btn.style.animation = 'fall-down 1.2s ease-out forwards';
+                setTimeout(() => resetBtn.style.display = 'block', 1200); // 动画完成后显示
+            } else if (random < 0.4) {
+                btn.style.animation = 'explode 0.5s ease-out forwards';
+                createExplosionParticles(btn);
+                setTimeout(() => resetBtn.style.display = 'block', 500); // 动画完成后显示
+            } else if (random < 0.6) {
+                btn.style.animation = 'liquid-flow 1.5s ease-in forwards';
+                setTimeout(() => resetBtn.style.display = 'block', 1500); // 动画完成后显示
+            } else if (random < 0.8) {
+                btn.style.animation = 'color-change 0.8s infinite';
+                setTimeout(() => {
+                    btn.style.animation = '';
+                    resetBtn.style.display = 'block'; // 颜色变换停止后显示
+                }, 3000);
+            } else {
+                // 跳转前不显示重来按钮（因为页面会跳转）
+                window.location.href = './61/6.12.html';
+            }
+        });
+
+        // 新增：重来按钮点击事件
+        resetBtn.addEventListener('click', () => {
+            btn.removeAttribute('style'); // 重置主按钮样式
+            resetBtn.style.display = 'none'; // 隐藏重来按钮
+        });
+
+        // 原有粒子生成函数（代码不变）
+        function createExplosionParticles(btn) {
+            const rect = btn.getBoundingClientRect();
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: #ff6b6b;
+                    border-radius: 50%;
+                    left: ${rect.left + rect.width/2}px;
+                    top: ${rect.top + rect.height/2}px;
+                    animation: explode 0.8s ease-out forwards;
+                    ${randomDirectionStyle()}
+                `;
+                document.body.appendChild(particle);
+                // 清理粒子
+                setTimeout(() => particle.remove(), 800);
+            }
+        }
+
+        // 生成随机方向样式
+        function randomDirectionStyle() {
+            const angle = Math.random() * 360;
+            const distance = Math.random() * 50 + 30;
+            return `transform: rotate(${angle}deg) translate(${distance}px)`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Win11风格动态博客</title>
+    <style>
+        :root {
+            --primary: #0078D4;
+            --acrylic: rgba(255, 255, 255, 0.72);
+            --gradient: linear-gradient(135deg, #8a9ff6 0%, #0078d4 100%);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', system-ui;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #f3f3f3, #e8e8e8);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 爱心背景效果 */
+        .heart {
+            position: absolute;
+            pointer-events: none;
+            animation: heartFly 1s linear forwards;
+            font-size: 20px;
+            color: #ff4081;
+        }
+
+        @keyframes heartFly {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -150%) scale(0.5); }
+        }
+
+        /* 亚克力效果 */
+        .acrylic {
+            background: var(--acrylic);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 导航栏 */
+        nav {
+            padding: 16px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: all 0.3s;
+        }
+
+        nav:hover {
+            box-shadow: 0 8px 32px rgba(0, 120, 212, 0.15);
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            margin: 0 8px;
+            border: none;
+            background: rgba(0, 120, 212, 0.1);
+            color: var(--primary);
+            border-radius: 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 文章卡片 */
+        .article-card {
+            width: 80%;
+            margin: 100px auto;
+            padding: 32px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .article-card {
+                width: 90%;
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 爱心背景 -->
+    <div id="hearts"></div>
+
+    <!-- 导航栏 -->
+    <nav class="acrylic">
+        <button class="nav-btn">首页</button>
+        <button class="nav-btn">文章</button>
+        <button class="nav-btn">关于</button>
+    </nav>
+
+    <!-- 文章列表 -->
+    <div class="article-card acrylic">
+        <h2>探索Windows 11设计之美</h2>
+        <p>微软最新的设计语言带来了令人惊艳的视觉效果...</p>
+        <div class="tags">
+            <span class="tag">设计</span>
+            <span class="tag">技术</span>
+        </div>
+    </div>
+
+    <script>
+        // 爱心动画
+        document.addEventListener('mousemove', (e) => {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤';
+            heart.style.left = e.pageX + 'px';
+            heart.style.top = e.pageY + 'px';
+            document.getElementById('hearts').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 1000);
+        });
+
+        // 卡片交互效果
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => card.style.transform = '', 200);
+            });
+        });
+    </script>
+
+    <style>
+        :root {
+            --primary: #0078D4;
+            --acrylic: rgba(255, 255, 255, 0.72);
+            --gradient: linear-gradient(135deg, #8a9ff6 0%, #0078d4 100%);
+        }
+
+        body {
+            /* 修改背景为动态渐变 */
+            background: linear-gradient(
+                45deg, 
+                #f0f7ff, 
+                #ffffff,
+                #f9fcff
+            );
+            background-size: 400% 400%;
+            animation: gradientBG 18s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 增强亚克力效果 */
+        .acrylic {
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.7),
+                rgba(255, 255, 255, 0.4)
+            );
+            backdrop-filter: blur(24px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            box-shadow: 
+                0 12px 40px -12px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.16) inset;
+        }
+
+        /* 新版导航栏 */
+        nav {
+            backdrop-filter: blur(24px);
+            padding: 12px;
+            border-radius: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-btn {
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            transition: 
+                transform 0.3s,
+                background 0.4s,
+                color 0.3s;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 120, 212, 0.15);
+            transform: translateY(-2px) scale(1.08);
+            color: #005a9e;
+        }
+
+        /* 增强卡片效果 */
+        .article-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .article-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--gradient);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.4s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 24px 48px rgba(0, 120, 212, 0.15),
+                0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .article-card:hover::after {
+            opacity: 0.06;
+        }
+
+        /* 新增标签样式 */
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(0, 120, 212, 0.12);
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+
+    <div class="deco-blur-1"></div>
+    <div class="deco-blur-2"></div>
+
+    <script>
+        // 页面加载动画
+        document.addEventListener('DOMContentLoaded', () => {
+            // 元素渐显动画
+            gsap.from('nav, .article-card', {
+                duration: 1,
+                y: 40,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+        });
+
+        // 新增：卡片3D旋转效果
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                card.style.transform = `
+                    perspective(1000px)
+                    rotateX(${(y - rect.height/2) / 8}deg)
+                    rotateY(${-(x - rect.width/2) / 8}deg)
+                    scale(1.02)
+                `;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
