@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 11启动问题修复指南</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a40 0%, #0c0032 100%);
+            color: #e6e6e6;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            background: rgba(10, 7, 33, 0.7);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(113, 119, 207, 0.2);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #8a7fff, #5e9bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a5a5d6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .scenario-section {
+            margin-bottom: 40px;
+            background: rgba(20, 17, 46, 0.6);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(113, 119, 207, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .scenario-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(113, 119, 207, 0.5);
+            color: #8a7fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .methods-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .method-card {
+            background: rgba(30, 27, 56, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(113, 119, 207, 0.2);
+            backdrop-filter: blur(8px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(138, 127, 255, 0.4);
+        }
+        
+        .method-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #5e9bff, #8a7fff);
+        }
+        
+        .method-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+        
+        .method-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(138, 127, 255, 0.15);
+            color: #8a7fff;
+        }
+        
+        .method-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #d4d1ff;
+        }
+        
+        .steps {
+            margin-left: 20px;
+        }
+        
+        .step {
+            margin-bottom: 20px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(138, 127, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #fff;
+        }
+        
+        .step:nth-child(1)::before { content: '1'; background: rgba(94, 155, 255, 0.5); }
+        .step:nth-child(2)::before { content: '2'; background: rgba(138, 127, 255, 0.5); }
+        .step:nth-child(3)::before { content: '3'; background: rgba(126, 97, 255, 0.5); }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #c2c0ff;
+        }
+        
+        .command {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: 'Consolas', monospace;
+            margin: 10px 0;
+            border-left: 3px solid #8a7fff;
+            overflow-x: auto;
+        }
+        
+        .note {
+            background: rgba(138, 127, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            border-left: 3px solid #8a7fff;
+        }
+        
+        .warning {
+            color: #ff9c5e;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .status-success {
+            background: rgba(94, 255, 172, 0.15);
+            color: #5effac;
+        }
+        
+        .status-warning {
+            background: rgba(255, 156, 94, 0.15);
+            color: #ff9c5e;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #7d7daa;
+        }
+        
+        @media (max-width: 768px) {
+            .methods-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Windows 11启动问题修复指南</h1>
+            <p class="subtitle">当您的Windows 11无法正常启动或陷入启动修复循环时，请按照以下方法进行修复</p>
+        </header>
+        
+        <div class="scenario-section">
+            <h2 class="scenario-title"><i class="fas fa-sync-alt fa-spin"></i> 情况1：Windows 11启动修复循环</h2>
+            
+            <div class="methods-container">
+                <!-- 方法1 -->
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-power-off"></i>
+                        </div>
+                        <h3 class="method-title">禁用系统失败时自动启动</h3>
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-title">步骤1：进入启动设置</div>
+                            <p>重启电脑，在"选择一个选项"界面中，依次点击：<br>
+                            <strong>疑难解答</strong> → <strong>高级选项</strong> → <strong>启动设置</strong> → <strong>重启</strong></p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤2：禁用自动启动</div>
+                            <p>在"启动设置"屏幕中，按<kbd>9</kbd>或<kbd>F9</kbd>选择"禁用系统失败时自动启动"。然后等待电脑引导，查看问题是否解决。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle"></i> 此方法可以防止系统在启动失败时自动重启，从而允许您查看错误信息。
+                    </div>
+                </div>
+                
+                <!-- 方法2 -->
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-hdd"></i>
+                        </div>
+                        <h3 class="method-title">运行chkdsk磁盘检查</h3>
+                    </div>
+                    
+                    <div class="status status-success">
+                        <i class="fas fa-check-circle"></i> 推荐方法
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-title">步骤1：打开命令提示符</div>
+                            <p>重启电脑，在"选择一个选项"界面中，依次点击：<br>
+                            <strong>疑难解答</strong> → <strong>高级选项</strong> → <strong>命令提示符</strong></p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤2：执行磁盘检查命令</div>
+                            <p>在"命令提示符"中，输入以下命令：</p>
+                            <div class="command">
+                                chkdsk C: /f /r
+                            </div>
+                            <p>按<kbd>Enter</kbd>执行命令，检查系统分区中是否存在损坏、无效或已删除的系统文件。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb"></i> 引导分区损坏可能会导致Windows 11启动修复循环的问题。
+                    </div>
+                </div>
+                
+                <!-- 方法3 -->
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h3 class="method-title">重建BCD启动配置数据</h3>
+                    </div>
+                    
+                    <div class="status status-success">
+                        <i class="fas fa-check-circle"></i> 推荐方法
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-title">步骤1：打开命令提示符</div>
+                            <p>重启电脑，在"选择一个选项"界面中，依次点击：<br>
+                            <strong>疑难解答</strong> → <strong>高级选项</strong> → <strong>命令提示符</strong></p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤2：执行BCD重建命令</div>
+                            <p>在"命令提示符"中，依次输入以下命令，每输入一条后按<kbd>Enter</kbd>：</p>
+                            <div class="command">
+                                bootrec /fixmbr<br>
+                                bootrec /fixboot<br>
+                                bootrec /rebuildbcd
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="warning">
+                        <i class="fas fa-exclamation-triangle"></i> 注意：在执行这些命令前，请确保您了解其作用，错误的操作可能导致系统无法启动。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="scenario-section">
+            <h2 class="scenario-title"><i class="fas fa-exclamation-triangle"></i> 情况2：Windows 11自动修复失败</h2>
+            
+            <div class="methods-container">
+                <!-- 方法4 -->
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="method-title">使用系统文件检查器</h3>
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-title">步骤1：打开命令提示符</div>
+                            <p>重启电脑，在"选择一个选项"界面中，依次点击：<br>
+                            <strong>疑难解答</strong> → <strong>高级选项</strong> → <strong>命令提示符</strong></p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤2：执行SFC扫描命令</div>
+                            <p>在"命令提示符"中，输入以下命令：</p>
+                            <div class="command">
+                                sfc /scannow /offbootdir=d:\ /offwindir=d:\windows
+                            </div>
+                            <p>按<kbd>Enter</kbd>执行命令，等待扫描完成。</p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤3：重启电脑</div>
+                            <p>等待完成后，重启电脑查看问题是否解决。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-info-circle"></i> 系统文件检查器(SFC)可以扫描并修复损坏的Windows系统文件。
+                    </div>
+                </div>
+                
+                <!-- 方法5 -->
+                <div class="method-card">
+                    <div class="method-header">
+                        <div class="method-icon">
+                            <i class="fas fa-virus-slash"></i>
+                        </div>
+                        <h3 class="method-title">禁用预先启动反恶意软件保护</h3>
+                    </div>
+                    
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-title">步骤1：进入启动设置</div>
+                            <p>重启电脑，在"选择一个选项"界面中，依次点击：<br>
+                            <strong>疑难解答</strong> → <strong>高级选项</strong> → <strong>启动设置</strong> → <strong>重启</strong></p>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-title">步骤2：禁用反恶意软件保护</div>
+                            <p>在"启动设置"屏幕中，按<kbd>8</kbd>或<kbd>F8</kbd>选择"禁用预先启动反恶意软件保护"。然后等待电脑引导，查看问题是否解决。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="note">
+                        <i class="fas fa-lightbulb"></i> 如果在安装反恶意软件保护后才出现该问题，禁用此功能可能解决启动问题。
+                    </div>
+                    
+                    <div class="warning">
+                        <i class="fas fa-exclamation-triangle"></i> 注意：此操作会暂时禁用安全功能，请仅在诊断启动问题时使用。
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Windows 11启动修复指南 | 请谨慎操作，重要数据请提前备份</p>
+            <p>© LHR下载站 | 致力做更好的下载站</p>
+        </footer>
+    </div>
+</body>
+</html>
