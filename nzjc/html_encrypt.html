@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML源代码加密工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --accent: #ff6b6b;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --light: #f8f9fa;
+            --success: #00b894;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--accent), #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #e0e0e0;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: rgba(26, 26, 46, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .panel:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .panel-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--accent);
+        }
+        
+        .panel-title h2 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-right: 15px;
+        }
+        
+        .icon {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            color: var(--accent);
+        }
+        
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(30, 30, 50, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+            font-family: 'Consolas', monospace;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(78, 0, 224, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(78, 0, 224, 0.5);
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-copy {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+        }
+        
+        .btn-copy:hover {
+            box-shadow: 0 7px 20px rgba(0, 114, 255, 0.5);
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+        }
+        
+        .btn-reset {
+            background: linear-gradient(135deg, #834d9b, #d04ed6);
+            box-shadow: 0 4px 15px rgba(131, 77, 155, 0.3);
+        }
+        
+        .btn-reset:hover {
+            box-shadow: 0 7px 20px rgba(131, 77, 155, 0.5);
+            background: linear-gradient(135deg, #d04ed6, #834d9b);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .info {
+            margin-top: 40px;
+            background: rgba(26, 26, 46, 0.7);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .info-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .card {
+            background: rgba(40, 40, 70, 0.6);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card h3 i {
+            margin-right: 10px;
+        }
+        
+        .card ul {
+            padding-left: 25px;
+        }
+        
+        .card li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #a0a0c0;
+        }
+        
+        .encrypted {
+            color: #00ff9c;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .encryption-method {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .encryption-method h3 {
+            color: var(--accent);
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-item input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .radio-item input[type="radio"]:checked::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+        
+        .radio-item label {
+            cursor: pointer;
+        }
+        
+        .note {
+            margin-top: 20px;
+            padding: 18px;
+            background: rgba(255, 107, 107, 0.15);
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.95rem;
+        }
+        
+        .example {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(30, 30, 50, 0.8);
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(200%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .success-message.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-lock"></i> HTML源代码加密工具</h1>
+            <p class="subtitle">保护您的HTML代码不被轻易查看或复制。提供两种加密方式，支持一键复制结果。</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-title">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h2>输入原始HTML代码</h2>
+                </div>
+                <textarea id="inputHtml" placeholder="在此粘贴您的HTML代码..."></textarea>
+                
+                <div class="encryption-method">
+                    <h3><i class="fas fa-key"></i> 加密方法:</h3>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="charCode" name="method" value="charCode" checked>
+                            <label for="charCode">字符编码转换</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="base64" name="method" value="base64">
+                            <label for="base64">Base64混淆</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn" id="encryptBtn">
+                        <i class="fas fa-lock"></i> 加密代码
+                    </button>
+                    <button class="btn btn-reset" id="resetBtn">
+                        <i class="fas fa-redo"></i> 重置
+                    </button>
+                </div>
+                
+                <div class="note">
+                    <strong><i class="fas fa-exclamation-circle"></i> 注意：</strong>这种加密方式只能增加代码阅读难度，并不能提供绝对的安全性。对于敏感内容，请考虑使用服务器端解决方案。
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">
+                    <div class="icon"><i class="fas fa-lock-open"></i></div>
+                    <h2>加密后的代码</h2>
+                </div>
+                <textarea id="outputHtml" placeholder="加密结果将显示在这里..." readonly></textarea>
+                
+                <div class="buttons">
+                    <button class="btn btn-copy" id="copyBtn">
+                        <i class="fas fa-copy"></i> 复制结果
+                    </button>
+                </div>
+                
+                <div class="example">
+                    <strong>示例加密结果：</strong><br>
+                    <div id="exampleOutput"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info">
+            <h2 class="info-title">
+                <i class="fas fa-info-circle"></i> 加密原理说明
+            </h2>
+            
+            <div class="info-content">
+                <div class="card">
+                    <h3><i class="fas fa-font"></i> 字符编码转换</h3>
+                    <ul>
+                        <li>将HTML代码转换为Unicode字符序列</li>
+                        <li>使用String.fromCharCode()方法动态重建HTML</li>
+                        <li>示例：<span class="encrypted">&lt;div&gt;</span> 转换为 <span class="encrypted">\u003c\u0064\u0069\u0076\u003e</span></li>
+                        <li>增加代码阅读难度，但浏览器仍可正常解析</li>
+                        <li>适用于简单加密需求</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-shield-alt"></i> Base64混淆</h3>
+                    <ul>
+                        <li>使用Base64编码原始HTML内容</li>
+                        <li>通过JavaScript的atob()函数在运行时解码</li>
+                        <li>使用document.write()或innerHTML输出内容</li>
+                        <li>在源码中只显示Base64字符串，隐藏实际内容</li>
+                        <li>提供比字符编码更高的混淆程度</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h3><i class="fas fa-book"></i> 使用说明</h3>
+                    <ul>
+                        <li>在左侧输入区粘贴HTML代码</li>
+                        <li>选择加密方法（默认字符编码转换）</li>
+                        <li>点击"加密代码"按钮生成加密结果</li>
+                        <li>使用"复制结果"按钮复制加密后的代码</li>
+                        <li>将加密代码用于您的HTML文件</li>
+                        <li>加密后的HTML文件在浏览器中可正常运行</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p><i class="far fa-copyright"></i> 2023 HTML源代码加密工具 | 本工具完全在浏览器中运行，不收集任何数据</p>
+        </footer>
+        
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i> 操作成功！
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputHtml = document.getElementById('inputHtml');
+            const outputHtml = document.getElementById('outputHtml');
+            const encryptBtn = document.getElementById('encryptBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const successMessage = document.getElementById('successMessage');
+            const exampleOutput = document.getElementById('exampleOutput');
+            
+            // 更新示例
+            updateExample();
+            
+            // 加密按钮点击事件
+            encryptBtn.addEventListener('click', function() {
+                const html = inputHtml.value.trim();
+                if (!html) {
+                    showMessage('请输入HTML代码');
+                    return;
+                }
+                
+                const method = document.querySelector('input[name="method"]:checked').value;
+                
+                if (method === 'charCode') {
+                    outputHtml.value = charCodeEncryption(html);
+                } else {
+                    outputHtml.value = base64Encryption(html);
+                }
+                
+                showMessage('代码加密成功！');
+            });
+            
+            // 复制按钮点击事件
+            copyBtn.addEventListener('click', function() {
+                if (!outputHtml.value) {
+                    showMessage('没有内容可复制');
+                    return;
+                }
+                
+                outputHtml.select();
+                document.execCommand('copy');
+                
+                showMessage('结果已复制到剪贴板！');
+            });
+            
+            // 重置按钮点击事件
+            resetBtn.addEventListener('click', function() {
+                inputHtml.value = '';
+                outputHtml.value = '';
+                inputHtml.focus();
+                showMessage('已重置所有内容');
+            });
+            
+            // 字符编码加密方法
+            function charCodeEncryption(html) {
+                let encrypted = "<!-- 使用字符编码加密的HTML代码 -->\n";
+                encrypted += "<script>\ndocument.write(String.fromCharCode(";
+                
+                // 将每个字符转换为其Unicode编码
+                for (let i = 0; i < html.length; i++) {
+                    encrypted += html.charCodeAt(i);
+                    if (i < html.length - 1) encrypted += ',';
+                }
+                
+                encrypted += "));\n<\/script>";
+                return encrypted;
+            }
+            
+            // Base64加密方法
+            function base64Encryption(html) {
+                // 使用btoa进行Base64编码
+                const base64 = btoa(unescape(encodeURIComponent(html)));
+                
+                let encrypted = "<!-- 使用Base64混淆加密的HTML代码 -->\n";
+                encrypted += "<script>\n";
+                encrypted += "  var encodedHtml = '" + base64 + "';\n";
+                encrypted += "  var decodedHtml = decodeURIComponent(escape(atob(encodedHtml)));\n";
+                encrypted += "  document.write(decodedHtml);\n";
+                encrypted += "<\/script>";
+                
+                return encrypted;
+            }
+            
+            // 显示成功消息
+            function showMessage(text) {
+                successMessage.innerHTML = `<i class="fas fa-check-circle"></i> ${text}`;
+                successMessage.classList.add('show');
+                
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 3000);
+            }
+            
+            // 更新示例
+            function updateExample() {
+                const exampleHtml = "<div style='color:red;'>Hello, World!</div>";
+                const encrypted = charCodeEncryption(exampleHtml);
+                exampleOutput.textContent = encrypted;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -229,6 +229,13 @@
           <p class="tool-desc">如果着急点我！</p>
           <a href="./nzjc/winhelp.html" target="_blank" class="tool-link">访问</a>
         </div>
+
+        <div class="tool-card">
+          <div class="tool-icon"><i class="fas fa-terminal"></i></div>
+          <div class="tool-name">LHR手册</div>
+          <p class="tool-desc">在第一次访问本站时请看</p>
+          <a href="./lhr手册.html" target="_blank" class="tool-link">访问</a>
+        </div>
       </div>
     </div>
 
@@ -452,3 +459,117 @@
   </script>
 </body>
 </html>
+
+<style>
+  /* 添加在现有样式后面 */
+  .win11-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    max-width: 500px;
+    width: 90%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .win11-dialog h3 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 1.3rem;
+  }
+  
+  .win11-dialog p {
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  
+  .win11-dialog-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+  }
+  
+  .win11-dialog-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+  }
+  
+  .win11-dialog-btn.primary {
+    background: var(--accent);
+    color: white;
+  }
+  
+  .win11-dialog-btn.secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .win11-dialog-btn.secondary:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .win11-dialog-btn.primary:hover {
+    opacity: 0.9;
+  }
+  
+  .win11-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+  }
+</style>
+
+<div id="firstVisitDialog" class="win11-dialog" style="display: none;">
+  <h3>哦，看来你还没有看过用户手册</h3>
+  <p>我们为你准备了一份详细的用户手册，帮助你更好地使用LHR工具合集。</p>
+  <div class="win11-dialog-buttons">
+    <button class="win11-dialog-btn primary" id="visitManualBtn">去看</button>
+    <button class="win11-dialog-btn secondary" id="dismissManualBtn" style="display: none;">不了</button>
+  </div>
+</div>
+<div id="dialogBackdrop" class="win11-dialog-backdrop" style="display: none;"></div>
+
+<script>
+  // 检查是否已经设置过不再提示
+  if (!localStorage.getItem('dontShowManualPrompt')) {
+    // 显示对话框
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        document.getElementById('firstVisitDialog').style.display = 'block';
+        document.getElementById('dialogBackdrop').style.display = 'block';
+        
+        // 10秒后显示"不了"按钮
+        setTimeout(function() {
+          document.getElementById('dismissManualBtn').style.display = 'block';
+        }, 10000);
+      }, 1000);
+    });
+    
+    // 设置按钮事件
+    document.getElementById('visitManualBtn').addEventListener('click', function() {
+      localStorage.setItem('dontShowManualPrompt', 'true');  // 添加这行
+      window.location.href = './lhr手册.html';
+    });
+    
+    document.getElementById('dismissManualBtn').addEventListener('click', function() {
+      localStorage.setItem('dontShowManualPrompt', 'true');
+      document.getElementById('firstVisitDialog').style.display = 'none';
+      document.getElementById('dialogBackdrop').style.display = 'none';
+    });
+  }
+</script>

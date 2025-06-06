@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多层加密解密工具 - Win11风格</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --win11-bg: #f3f3f3;
+            --win11-surface: #ffffff;
+            --win11-accent: #0067c0;
+            --win11-accent-light: #e5f1fb;
+            --win11-border: #d3d3d3;
+            --win11-text: #1a1a1a;
+            --win11-text-secondary: #666666;
+            --win11-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --win11-radius: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--win11-bg);
+            color: var(--win11-text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--win11-accent);
+        }
+
+        .subtitle {
+            color: var(--win11-text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background: var(--win11-surface);
+            border-radius: var(--win11-radius);
+            box-shadow: var(--win11-shadow);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            color: var(--win11-accent);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        textarea, select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--win11-border);
+            border-radius: 6px;
+            font-size: 1rem;
+            background: var(--win11-surface);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus, select:focus, input:focus {
+            outline: none;
+            border-color: var(--win11-accent);
+            box-shadow: 0 0 0 2px rgba(0, 103, 192, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: var(--win11-accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.05s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        .btn:hover {
+            background: #005bb5;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--win11-accent);
+            color: var(--win11-accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--win11-accent-light);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .result-container {
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--win11-accent-light);
+            color: var(--win11-accent);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #d6e9f8;
+        }
+
+        .layer {
+            background: var(--win11-accent-light);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .layer-number {
+            background: var(--win11-accent);
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .layer-details {
+            flex: 1;
+        }
+
+        .layer-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .layer-btn {
+            background: transparent;
+            border: none;
+            color: var(--win11-text-secondary);
+            cursor: pointer;
+            font-size: 1.1rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .layer-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            color: var(--win11-accent);
+        }
+
+        .html-code {
+            background: #1e1e1e;
+            color: #dcdcdc;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            position: relative;
+            margin-top: 15px;
+        }
+
+        .html-code-title {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #dcdcdc;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--win11-surface);
+            border-radius: var(--win11-radius);
+            box-shadow: var(--win11-shadow);
+            padding: 25px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--win11-accent);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--win11-text-secondary);
+        }
+
+        .close-btn:hover {
+            color: var(--win11-text);
+        }
+
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>多层加密解密工具</h1>
+            <p class="subtitle">支持移位加密、BASE64、二进制和摩斯密码的加解密操作</p>
+        </header>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-key"></i> 输入内容</h2>
+            <div class="input-group">
+                <label for="inputText">输入文本：</label>
+                <textarea id="inputText" placeholder="在此输入需要加密或解密的文本..."></textarea>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-layer-group"></i> 加密方法</h2>
+            <div class="input-group">
+                <label for="encryptionMethod">选择加密/解密方法：</label>
+                <select id="encryptionMethod">
+                    <option value="shift">移位加密 (Caesar Cipher)</option>
+                    <option value="base64">BASE64 编码/解码</option>
+                    <option value="binary">二进制 编码/解码</option>
+                    <option value="morse">摩斯密码 (Morse Code)</option>
+                </select>
+            </div>
+
+            <div id="shiftParams" class="input-group">
+                <label for="shiftAmount">移位数量：</label>
+                <input type="number" id="shiftAmount" value="3" min="1" max="25">
+            </div>
+
+            <div class="btn-group">
+                <button id="addEncryptBtn" class="btn"><i class="fas fa-plus"></i> 添加加密层</button>
+                <button id="addDecryptBtn" class="btn btn-outline"><i class="fas fa-minus"></i> 添加解密层</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-list-ol"></i> 加密层序列</h2>
+            <div id="layersContainer">
+                <div class="empty-state">
+                    <p>尚未添加任何加密层。请从上方添加加密/解密操作。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-lock"></i> 执行操作</h2>
+            <div class="actions">
+                <button id="encryptBtn" class="btn"><i class="fas fa-lock"></i> 执行加密</button>
+                <button id="decryptBtn" class="btn btn-outline"><i class="fas fa-unlock"></i> 执行解密</button>
+                <button id="generateHtmlBtn" class="btn"><i class="fab fa-html5"></i> 生成HTML代码</button>
+                <button id="clearBtn" class="btn btn-outline"><i class="fas fa-trash-alt"></i> 清除所有</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-terminal"></i> 结果输出</h2>
+            <div class="input-group">
+                <label for="outputText">处理结果：</label>
+                <div class="result-container">
+                    <textarea id="outputText" readonly placeholder="结果将显示在这里..."></textarea>
+                    <button id="copyResultBtn" class="copy-btn"><i class="fas fa-copy"></i> 复制</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-code"></i> HTML 代码生成</h2>
+            <div class="html-code">
+                <div class="html-code-title">生成的HTML代码：</div>
+                <div id="htmlOutput"></div>
+            </div>
+            <div class="btn-group">
+                <button id="copyHtmlBtn" class="btn"><i class="fas fa-copy"></i> 复制HTML代码</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="htmlModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">生成的HTML代码</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="html-code">
+                <div id="modalHtmlOutput"></div>
+            </div>
+            <div class="btn-group" style="margin-top: 20px;">
+                <button id="modalCopyHtmlBtn" class="btn"><i class="fas fa-copy"></i> 复制代码</button>
+                <button id="closeModalBtn" class="btn btn-outline">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 页面元素
+            const inputText = document.getElementById('inputText');
+            const outputText = document.getElementById('outputText');
+            const encryptionMethod = document.getElementById('encryptionMethod');
+            const shiftParams = document.getElementById('shiftParams');
+            const shiftAmount = document.getElementById('shiftAmount');
+            const addEncryptBtn = document.getElementById('addEncryptBtn');
+            const addDecryptBtn = document.getElementById('addDecryptBtn');
+            const layersContainer = document.getElementById('layersContainer');
+            const encryptBtn = document.getElementById('encryptBtn');
+            const decryptBtn = document.getElementById('decryptBtn');
+            const generateHtmlBtn = document.getElementById('generateHtmlBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const copyResultBtn = document.getElementById('copyResultBtn');
+            const htmlOutput = document.getElementById('htmlOutput');
+            const copyHtmlBtn = document.getElementById('copyHtmlBtn');
+            const htmlModal = document.getElementById('htmlModal');
+            const modalHtmlOutput = document.getElementById('modalHtmlOutput');
+            const modalCopyHtmlBtn = document.getElementById('modalCopyHtmlBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const closeModalButtons = document.querySelectorAll('.close-btn');
+
+            // 加密层数组
+            let encryptionLayers = [];
+
+            // 加密方法显示处理
+            encryptionMethod.addEventListener('change', function() {
+                shiftParams.style.display = this.value === 'shift' ? 'block' : 'none';
+            });
+
+            // 初始隐藏移位参数
+            shiftParams.style.display = encryptionMethod.value === 'shift' ? 'block' : 'none';
+
+            // 添加加密层
+            addEncryptBtn.addEventListener('click', function() {
+                addLayer(false);
+            });
+
+            // 添加解密层
+            addDecryptBtn.addEventListener('click', function() {
+                addLayer(true);
+            });
+
+            // 执行加密
+            encryptBtn.addEventListener('click', function() {
+                const text = inputText.value;
+                if (!text) {
+                    alert('请输入需要加密的文本！');
+                    return;
+                }
+                
+                if (encryptionLayers.length === 0) {
+                    alert('请至少添加一个加密层！');
+                    return;
+                }
+                
+                let result = text;
+                for (const layer of encryptionLayers) {
+                    if (layer.isDecrypt) {
+                        result = decrypt(result, layer.method, layer.shift);
+                    } else {
+                        result = encrypt(result, layer.method, layer.shift);
+                    }
+                }
+                
+                outputText.value = result;
+            });
+
+            // 执行解密
+            decryptBtn.addEventListener('click', function() {
+                const text = inputText.value;
+                if (!text) {
+                    alert('请输入需要解密的文本！');
+                    return;
+                }
+                
+                if (encryptionLayers.length === 0) {
+                    alert('请至少添加一个加密层！');
+                    return;
+                }
+                
+                let result = text;
+                // 反向执行所有操作（解密时反转顺序并取反操作）
+                for (let i = encryptionLayers.length - 1; i >= 0; i--) {
+                    const layer = encryptionLayers[i];
+                    if (layer.isDecrypt) {
+                        result = encrypt(result, layer.method, layer.shift);
+                    } else {
+                        result = decrypt(result, layer.method, layer.shift);
+                    }
+                }
+                
+                outputText.value = result;
+            });
+
+            // 生成HTML代码
+            generateHtmlBtn.addEventListener('click', function() {
+                const result = outputText.value;
+                if (!result) {
+                    alert('请先执行加密操作！');
+                    return;
+                }
+                
+                const htmlCode = generateHtmlCode(result);
+                htmlOutput.textContent = htmlCode;
+                modalHtmlOutput.textContent = htmlCode;
+                htmlModal.classList.add('active');
+            });
+
+            // 复制结果
+            copyResultBtn.addEventListener('click', function() {
+                outputText.select();
+                document.execCommand('copy');
+                alert('已复制到剪贴板！');
+            });
+
+            // 复制HTML代码
+            copyHtmlBtn.addEventListener('click', function() {
+                copyToClipboard(htmlOutput.textContent);
+                alert('HTML代码已复制到剪贴板！');
+            });
+
+            // 模态框中复制HTML代码
+            modalCopyHtmlBtn.addEventListener('click', function() {
+                copyToClipboard(modalHtmlOutput.textContent);
+                alert('HTML代码已复制到剪贴板！');
+            });
+
+            // 关闭模态框
+            closeModalButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    htmlModal.classList.remove('active');
+                });
+            });
+
+            closeModalBtn.addEventListener('click', function() {
+                htmlModal.classList.remove('active');
+            });
+
+            // 清除所有
+            clearBtn.addEventListener('click', function() {
+                inputText.value = '';
+                outputText.value = '';
+                htmlOutput.textContent = '';
+                encryptionLayers = [];
+                updateLayersDisplay();
+            });
+
+            // 添加加密/解密层
+            function addLayer(isDecrypt) {
+                const method = encryptionMethod.value;
+                const shift = method === 'shift' ? parseInt(shiftAmount.value) : 0;
+                
+                encryptionLayers.push({
+                    method: method,
+                    isDecrypt: isDecrypt,
+                    shift: shift
+                });
+                
+                updateLayersDisplay();
+            }
+
+            // 更新层显示
+            function updateLayersDisplay() {
+                layersContainer.innerHTML = '';
+                
+                if (encryptionLayers.length === 0) {
+                    layersContainer.innerHTML = '<div class="empty-state"><p>尚未添加任何加密层。请从上方添加加密/解密操作。</p></div>';
+                    return;
+                }
+                
+                encryptionLayers.forEach((layer, index) => {
+                    const layerEl = document.createElement('div');
+                    layerEl.className = 'layer';
+                    
+                    const methodNames = {
+                        'shift': '移位加密',
+                        'base64': 'BASE64',
+                        'binary': '二进制',
+                        'morse': '摩斯密码'
+                    };
+                    
+                    layerEl.innerHTML = `
+                        <div style="display: flex; align-items: center;">
+                            <div class="layer-number">${index + 1}</div>
+                            <div class="layer-details">
+                                <strong>${methodNames[layer.method]}</strong>
+                                <div>${layer.isDecrypt ? '解密' : '加密'}${layer.method === 'shift' ? ` (移位: ${layer.shift})` : ''}</div>
+                            </div>
+                        </div>
+                        <div class="layer-actions">
+                            <button class="layer-btn move-up" data-index="${index}"><i class="fas fa-arrow-up"></i></button>
+                            <button class="layer-btn move-down" data-index="${index}"><i class="fas fa-arrow-down"></i></button>
+                            <button class="layer-btn delete-layer" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    
+                    layersContainer.appendChild(layerEl);
+                });
+                
+                // 添加事件监听器
+                document.querySelectorAll('.move-up').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        if (index > 0) {
+                            [encryptionLayers[index], encryptionLayers[index - 1]] = 
+                            [encryptionLayers[index - 1], encryptionLayers[index]];
+                            updateLayersDisplay();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.move-down').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        if (index < encryptionLayers.length - 1) {
+                            [encryptionLayers[index], encryptionLayers[index + 1]] = 
+                            [encryptionLayers[index + 1], encryptionLayers[index]];
+                            updateLayersDisplay();
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-layer').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const index = parseInt(this.dataset.index);
+                        encryptionLayers.splice(index, 1);
+                        updateLayersDisplay();
+                    });
+                });
+            }
+
+            // 加密函数
+            function encrypt(text, method, shift = 3) {
+                switch (method) {
+                    case 'shift':
+                        return caesarCipher(text, shift);
+                    case 'base64':
+                        return btoa(unescape(encodeURIComponent(text)));
+                    case 'binary':
+                        return textToBinary(text);
+                    case 'morse':
+                        return textToMorse(text);
+                    default:
+                        return text;
+                }
+            }
+
+            // 解密函数
+            function decrypt(text, method, shift = 3) {
+                switch (method) {
+                    case 'shift':
+                        return caesarCipher(text, -shift);
+                    case 'base64':
+                        try {
+                            return decodeURIComponent(escape(atob(text)));
+                        } catch (e) {
+                            return "BASE64解码错误！";
+                        }
+                    case 'binary':
+                        return binaryToText(text);
+                    case 'morse':
+                        return morseToText(text);
+                    default:
+                        return text;
+                }
+            }
+
+            // 移位加密（凯撒密码）
+            function caesarCipher(text, shift) {
+                return text.replace(/[a-zA-Z]/g, function(char) {
+                    const base = char <= 'Z' ? 65 : 97;
+                    return String.fromCharCode(((char.charCodeAt(0) - base + shift + 26) % 26) + base);
+                });
+            }
+
+            // 文本转二进制
+            function textToBinary(text) {
+                return text.split('').map(char => {
+                    return char.charCodeAt(0).toString(2).padStart(8, '0');
+                }).join(' ');
+            }
+
+            // 二进制转文本
+            function binaryToText(binary) {
+                return binary.split(' ').map(bin => {
+                    return bin ? String.fromCharCode(parseInt(bin, 2)) : '';
+                }).join('');
+            }
+
+            // 摩斯密码字典
+            const morseCode = {
+                'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+                'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+                'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+                'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+                'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---',
+                '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...',
+                '8': '---..', '9': '----.', '.': '.-.-.-', ',': '--..--', '?': '..--..',
+                "'": '.----.', '!': '-.-.--', '/': '-..-.', '(': '-.--.', ')': '-.--.-',
+                '&': '.-...', ':': '---...', ';': '-.-.-.', '=': '-...-', '+': '.-.-.',
+                '-': '-....-', '_': '..--.-', '"': '.-..-.', '$': '...-..-', '@': '.--.-.',
+                ' ': '/'
+            };
+
+            // 反转摩斯密码字典用于解码
+            const morseDecode = {};
+            for (const [key, value] of Object.entries(morseCode)) {
+                morseDecode[value] = key;
+            }
+
+            // 文本转摩斯密码
+            function textToMorse(text) {
+                return text.toUpperCase().split('').map(char => {
+                    return morseCode[char] || char;
+                }).join(' ');
+            }
+
+            // 摩斯密码转文本
+            function morseToText(morse) {
+                return morse.split(' ').map(code => {
+                    return morseDecode[code] || code;
+                }).join('');
+            }
+
+            // 生成HTML代码
+            function generateHtmlCode(encryptedContent) {
+                return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加密内容解密器</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f3f3f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #0067c0;
+            margin-bottom: 20px;
+        }
+        
+        .result {
+            background: #e5f1fb;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+            word-break: break-all;
+            text-align: left;
+        }
+        
+        .btn {
+            background: #0067c0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: background 0.2s;
+        }
+        
+        .btn:hover {
+            background: #005bb5;
+        }
+        
+        .note {
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>加密内容解密器</h1>
+        <p>以下内容已成功解密：</p>
+        <div class="result" id="decryptedResult"></div>
+        <button class="btn" onclick="copyDecryptedText()"><i class="fas fa-copy"></i> 复制解密内容</button>
+        <p class="note">此页面包含已解密的内容，请妥善保管</p>
+    </div>
+    
+    <script>
+        // 加密内容
+        const encryptedContent = "${encryptedContent.replace(/"/g, '\\"')}";
+        
+        // 解密函数
+        function decryptText(text) {
+            // 这里是您的解密逻辑
+            // 示例：多层解密操作
+            let result = text;
+            
+            // 第一层：BASE64解码
+            try {
+                result = decodeURIComponent(escape(atob(result)));
+            } catch (e) {}
+            
+            // 第二层：移位加密（凯撒密码）解密
+            result = result.replace(/[a-zA-Z]/g, function(char) {
+                const base = char <= 'Z' ? 65 : 97;
+                return String.fromCharCode(((char.charCodeAt(0) - base - 3 + 26) % 26) + base);
+            });
+            
+            return result;
+        }
+        
+        // 在页面加载时解密内容
+        window.onload = function() {
+            const decryptedResult = document.getElementById('decryptedResult');
+            const decryptedText = decryptText(encryptedContent);
+            decryptedResult.textContent = decryptedText;
+        };
+        
+        // 复制解密内容
+        function copyDecryptedText() {
+            const text = document.getElementById('decryptedResult').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('解密内容已复制到剪贴板！');
+            });
+        }
+    </script>
+</body>
+</html>`;
+            }
+
+            // 复制到剪贴板
+            function copyToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        });
+    </script>
+</body>
+</html>
