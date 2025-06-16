@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /*.html$
+Disallow: /images
+Disallow: /media
+Sitemap: https://youareanidiot.cc/sitemap.xml
